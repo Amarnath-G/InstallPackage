@@ -19,11 +19,11 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'pemcred', keyFileVariable: 'KEYFILE', usernameVariable: 'USERNAME')]) {
                         if (tool == 'java') {
                             sh """
-                                ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip} 'sudo apt update && sudo apt install openjdk-17-jdk -y && java -version'
+                                ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip} 'sudo yum update && sudo yum install openjdk-17-jdk -y && java -version'
                             """
                         } else {
                             sh """
-                                ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip} 'sudo apt update && sudo apt install python3 python3-pip -y && python3 --version'
+                                ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip} 'sudo yum update && sudo yum install python3 python3-pip -y && python3 --version'
                             """
                         }
                     }
