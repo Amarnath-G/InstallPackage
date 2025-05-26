@@ -1,0 +1,36 @@
+pipeline{
+    agent any
+
+    // parameters{
+    //     string(name:IP_address,defaultValue:'',description:'IP Address of remote server')
+    //     choice(name:Language,choices:[Java,Python],description:'To install in remote server')
+    // }
+
+    stages{
+        stage('Installing'){
+            steps{
+                input{
+                    message 'Enter IP address and languague:'
+                    parameters:[
+                        string(name:'ip_addr',defaultValue:'',description:'Enter IP Address'),
+                        choice(name:'Tool',choices:['java','python'],description:'select to install in remote server')
+                    ]
+                }
+
+                withCredentials([file(credentialsId='pemcred',variable:'fileVar')]){
+                    script{
+                        def tool=${Tool}
+                        if(tool == 'java'){
+                            sh 'ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip_addr} sudo apt update && sudo apt install openjdk-17-jdk -y && java -version'
+                        }
+                        else{
+                            sh 'ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip_addr} sudo apt update && sudo apt install python3 python3-pip -y && python3 --version'
+                        }
+                        
+                    }
+                }
+                
+            }
+        }
+    }
+}
