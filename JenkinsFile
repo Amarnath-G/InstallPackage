@@ -19,7 +19,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'pemcred', keyFileVariable: 'KEYFILE', usernameVariable: 'USERNAME')]) {
                         if (tool == 'java') {
                             sh """
-                                ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip} 'sudo yum update && sudo yum install java-17-openjdk -y && java -version'
+                                ssh -i ${KEYFILE} -o StrictHostKeyChecking=no ec2-user@${ip} 'sudo dnf update -y && sudo dnf install java-17-amazon-corretto -y && java -version'
                             """
                         } else {
                             sh """
